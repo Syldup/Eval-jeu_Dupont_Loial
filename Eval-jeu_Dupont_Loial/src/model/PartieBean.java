@@ -35,7 +35,7 @@ public class PartieBean {
             DAOFactory.getPartieDAO().update(partie);
     }
 
-    public static Partie getObject(ResultSet rs) {
+    public static Partie getFromResultSet(ResultSet rs) {
         int id;
         try { id = rs.getInt("idpartie"); }
         catch (SQLException e) { id = 0; }

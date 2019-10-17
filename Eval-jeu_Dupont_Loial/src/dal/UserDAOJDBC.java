@@ -3,7 +3,6 @@ package dal;
 import bo.User;
 import model.UserBean;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(UserBean.getObject(rs));
+				objects.add(UserBean.getFromResultSet(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -75,7 +74,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = UserBean.getObject(rs);
+					object = UserBean.getFromResultSet(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -100,7 +99,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
              Statement s = conn.createStatement();
              ResultSet rs = s.executeQuery(TOP_PLAYER_DISPLAY)) {
             while (rs.next())
-                objects.add(UserBean.getObject(rs));
+                objects.add(UserBean.getFromResultSet(rs));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -115,7 +114,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setString( 2, password );
 			try ( ResultSet rs = ps.executeQuery() ) {
 				if ( rs.next() )
-					user = UserBean.getObject(rs);
+					user = UserBean.getFromResultSet(rs);
 			}
 		}
 		return user;

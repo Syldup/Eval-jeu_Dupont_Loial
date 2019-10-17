@@ -1,6 +1,8 @@
 package bo;
 
-public class Calcul {
+import java.io.Serializable;
+
+public class Calcul implements Serializable {
     private int id = 0;
     private String calcul;
     private String resultat;
@@ -11,14 +13,6 @@ public class Calcul {
     public Calcul(String calcul, String resultat, Partie partie) {
         this.calcul = calcul;
         this.resultat = resultat;
-        this.partie = partie;
-    }
-
-    public Calcul(String calcul, String resultat, String reponce, String date, Partie partie) {
-        this.calcul = calcul;
-        this.resultat = resultat;
-        this.reponce = reponce;
-        this.date = date;
         this.partie = partie;
     }
 

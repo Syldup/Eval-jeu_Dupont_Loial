@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserBean {
-    public static User getObject(ResultSet rs) {
+    public static User getFromResultSet(ResultSet rs) {
         int id;
         try { id = rs.getInt("iduser"); }
         catch (SQLException e) { id = 0; }

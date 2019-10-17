@@ -1,3 +1,4 @@
+<jsp:useBean id="loginBean" scope="request" type="model.LoginBean"/>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 	<head>

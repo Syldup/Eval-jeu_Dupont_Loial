@@ -13,29 +13,32 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 	
 	private static final String PAGE_LOGIN_JSP = "/WEB-INF/jsp/login.jsp";
-	private static final String PAGE_HOME_JSP = "/home";
+	private static final String PAGE_HOME = "/home";
 	
 	@Override
-	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		
-		LoginBean model = new LoginBean();
-		if ( model.isConnected( request ) ) {
-			response.sendRedirect( request.getContextPath() + PAGE_HOME_JSP );
+	protected void doGet( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
+
+		LoginBean model = (LoginBean) req.getAttribute( "loginBean" );
+		if (model == null)
+			model = new LoginBean();
+		req.setAttribute("loginBean", model);
+		if ( model.isConnected( req ) ) {
+			resp.sendRedirect( req.getContextPath()+ PAGE_HOME );
 		} else {
-			request.getRequestDispatcher( PAGE_LOGIN_JSP ).forward( request, response );
+			req.getRequestDispatcher( PAGE_LOGIN_JSP ).forward( req, resp );
 		}
 	}
 	
 	@Override
-	protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+	protected void doPost( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
 
 		LoginBean model = new LoginBean();
-	 	model.authenticate( request );
-	 	request.setAttribute( "loginBean", model );
+	 	model.authenticate( req );
+		req.setAttribute( "loginBean", model );
 
 
-		model.suscribe(request);
-		request.setAttribute("loginBean",model);
-		doGet( request, response );
+		model.suscribe(req);
+		req.setAttribute("loginBean",model);
+		doGet( req, resp );
 	}
 }

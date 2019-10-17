@@ -1,3 +1,4 @@
+<jsp:useBean id="curCalcul" scope="request" type="bo.Calcul"/>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 	<head>
@@ -12,14 +13,11 @@
 			<div class="wrap-front">
 				<form method="POST" action="question">
 					<div class="group">
-						<label for="pass" class="label">Mot de passe</label>
-						<input id="pass" type="password" class="input" data-type="password" name="form-pwd">
+						<label for="pass" class="label">${curCalcul.calcul}</label>
+						<input id="pass" type="text" class="input" name="form-reponse" value="${curCalcul.resultat}"/>
 					</div>
 					<div class="group">
-						<input type="text" class="input" name="form-reponse" value="${loginBean.login}"/>
-					</div>
-					<div class="group">
-						<input type="submit" class="button" value="Se connecter">
+						<input type="submit" class="button" value="Suivent">
 					</div>
 					<div class="hr"></div>
 				</form>

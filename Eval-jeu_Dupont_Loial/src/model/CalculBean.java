@@ -1,7 +1,7 @@
 package model;
 
 import bo.Calcul;
-import bo.Operateur;
+import bo.Equation;
 import bo.Partie;
 import dal.DAOFactory;
 
@@ -14,10 +14,7 @@ public class CalculBean {
     public static final String ATT_CALCUL_SESSION = "curCalcul";
     public static final String FORM_FIELD_REPONCE = "form-reponce";
 
-    public static Calcul getCalculFromRequest( HttpServletRequest req ) {
-        if (req.getParameter( FORM_FIELD_REPONCE ) == null)
-            return null;
-
+    public static Calcul getFromRequest(HttpServletRequest req ) {
         HttpSession session = req.getSession(true);
         Calcul calcul = ( Calcul ) session.getAttribute( ATT_CALCUL_SESSION );
         Partie partie = calcul.getPartie();
@@ -27,6 +24,12 @@ public class CalculBean {
         return calcul;
     }
 
+    public static Calcul newCalcul(Partie partie) {
+        Equation exp = new Equation();
+        exp.createExpretion(5);
+        return new Calcul(exp.toString(), exp.calculResult(), partie);
+    }
+
     public static void save(Calcul calcul) {
         if (calcul.getId() == 0)
             DAOFactory.getCalculDAO().create(calcul);
@@ -34,13 +37,7 @@ public class CalculBean {
             DAOFactory.getCalculDAO().update(calcul);
     }
 
-    public static Calcul newCalcul(Partie partie) {
-        Operateur op = new Operateur();
-        op.createExpretion();
-        return new Calcul(op.toString(), op.calculResult(), partie);
-    }
-
-    public static Calcul getObject(ResultSet rs) {
+    public static Calcul getFromResultSet(ResultSet rs) {
         int id;
         try { id = rs.getInt("idcalcul"); }
         catch (SQLException e) { id = 0; }

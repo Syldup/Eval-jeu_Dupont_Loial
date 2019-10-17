@@ -62,7 +62,7 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(PartieBean.getObject(rs));
+				objects.add(PartieBean.getFromResultSet(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -77,7 +77,7 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = PartieBean.getObject(rs);
+					object = PartieBean.getFromResultSet(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

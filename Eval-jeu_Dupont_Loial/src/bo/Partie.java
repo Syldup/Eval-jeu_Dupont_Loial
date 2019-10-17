@@ -1,5 +1,6 @@
 package bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Partie {
@@ -7,7 +8,7 @@ public class Partie {
     private int score = 0;
     private String date;
     private User user;
-    private List<Calcul> calculs;
+    private List<Calcul> calculs = new ArrayList<>();
 
     public Partie(User user) {
         this.user = user;
@@ -15,12 +16,6 @@ public class Partie {
 
     public Partie(int id, int score, String date, User user) {
         this.id = id;
-        this.score = score;
-        this.date = date;
-        this.user = user;
-    }
-
-    public Partie(int score, String date, User user) {
         this.score = score;
         this.date = date;
         this.user = user;

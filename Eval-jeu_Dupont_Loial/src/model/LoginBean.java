@@ -17,15 +17,13 @@ public class LoginBean implements Serializable {
 	private static final String FORM_FIELD_CONF_PWD = "form-pwd2";
 	
 	private String login;
-	private String pwd;
-	private String pwd2;
 	private String authentResult;
 	
 	public LoginBean() {}
 	
 	public void authenticate( HttpServletRequest request ) {
 		login = request.getParameter( FORM_FIELD_LOGIN );
-		pwd = request.getParameter( FORM_FIELD_PWD );
+		String pwd = request.getParameter( FORM_FIELD_PWD );
 		UserDAOJDBC dao = ( UserDAOJDBC ) DAOFactory.getUserDAO();
 		User user = null;
 		try {
@@ -33,7 +31,6 @@ public class LoginBean implements Serializable {
 			
 			if ( user != null ) {
 				HttpSession session = request.getSession( true );
-				//TODO récupération et incrémentation du nombre de connexions
 				session.setAttribute( ATT_AUTH_SESSION, user );
 				authentResult = "Authentification réussie : Bienvenue " + login;
 			} else {
@@ -47,8 +44,8 @@ public class LoginBean implements Serializable {
 
 	public void suscribe(HttpServletRequest request){
 		login = request.getParameter(FORM_FIELD_LOGIN);
-		pwd = request.getParameter(FORM_FIELD_PWD);
-		pwd2 = request.getParameter(FORM_FIELD_CONF_PWD);
+		String pwd = request.getParameter(FORM_FIELD_PWD);
+		String pwd2 = request.getParameter(FORM_FIELD_CONF_PWD);
 		UserDAOJDBC dao=(UserDAOJDBC)DAOFactory.getUserDAO();
 		User user=null;
 
@@ -64,36 +61,19 @@ public class LoginBean implements Serializable {
                 authentResult="Sa ne fonctionne pas";
 			}
 		}
-
 	}
 	
-	public boolean isConnected( HttpServletRequest request ) {
-		HttpSession session = request.getSession();
+	public boolean isConnected( HttpServletRequest req ) {
+		HttpSession session = req.getSession();
 		User connectedUser = ( User ) session.getAttribute( ATT_AUTH_SESSION );
 		return connectedUser != null;
 	}
-	
+
 	public String getLogin() {
 		return login;
 	}
-	
-	public void setLogin( String login ) {
-		this.login = login;
-	}
-	
-	public String getPwd() {
-		return pwd;
-	}
-	
-	public void setPwd( String pwd ) {
-		this.pwd = pwd;
-	}
-	
+
 	public String getAuthentResult() {
 		return authentResult;
-	}
-	
-	public void setAuthentResult( String authentResult ) {
-		this.authentResult = authentResult;
 	}
 }
