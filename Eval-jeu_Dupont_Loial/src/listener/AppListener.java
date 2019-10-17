@@ -22,9 +22,4 @@ public class AppListener implements ServletContextListener {
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void contextDestroyed( ServletContextEvent sce ) {
-		LOGGER.log( Level.INFO, "Desctruction du contexte applicatif... " );
-	}
 }

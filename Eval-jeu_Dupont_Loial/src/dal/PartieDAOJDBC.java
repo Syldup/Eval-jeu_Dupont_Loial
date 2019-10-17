@@ -1,32 +1,31 @@
 package dal;
 
+import bo.Partie;
 import bo.User;
-import model.UserBean;
+import model.PartieBean;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOJDBC extends DAOJDBC<Integer, User> {
-	
-	private static final String AUTHENT_QUERY = "SELECT idUser, username, idbestpartie FROM user WHERE username = ? AND password = ?";
-	private static final String INSERT_QUERY = "INSERT INTO user (username, password) VALUES (?, ?)";
-	private static final String UPDATE_QUERY = "UPDATE user SET username=?, password=?, idbestpartie=? WHERE idUser=?";
-	private static final String FIND_ALL_QUERY = "SELECT idUser, username, idbestpartie FROM user";
-	private static final String FIND_BY_ID_QUERY = "SELECT idUser, username, idbestpartie FROM user WHERE idUser=?";
-	private static final String DELETE_QUERY = "DELETE FROM user WHERE idUser=?";
-	
-	public UserDAOJDBC( String dbUrl, String dbLogin, String dbPwd ) {
+public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
+
+	private static final String INSERT_QUERY = "INSERT INTO partie (score, date, iduser) VALUES (?, NOW(), ?)";
+	private static final String UPDATE_QUERY = "UPDATE partie SET score=? WHERE idpartie=? AND iduser=?";
+	private static final String FIND_ALL_QUERY = "SELECT * FROM partie LIMIT 10";
+	private static final String FIND_BY_ID_QUERY = "SELECT * FROM partie WHERE idpartie=?";
+	private static final String DELETE_QUERY = "DELETE FROM partie WHERE idpartie=?";
+
+	public PartieDAOJDBC(String dbUrl, String dbLogin, String dbPwd ) {
 		super( dbUrl, dbLogin, dbPwd );
 	}
 
 	@Override
-	public void create(User object) {
+	public void create(Partie object) {
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-			ps.setString(1, object.getUsername());
-			ps.setString(2, object.getPassword());
+			ps.setInt(1, object.getScore());
+			ps.setInt(2, object.getUser().getId());
 			ps.executeUpdate();
 			try(ResultSet rs = ps.getGeneratedKeys()) {
 				if (rs.next())
@@ -37,15 +36,19 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 		}
 	}
 
+	public void update(Partie object, User user) {
+		object.setUser(user);
+		update(object);
+	}
+
 	@Override
-	public void update(User object) {
+	public void update(Partie object) {
 		if (object.getId() > 0)
 			try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 				 PreparedStatement ps = conn.prepareStatement(UPDATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-				ps.setString(1, object.getUsername());
-				ps.setString(2, object.getPassword());
-				ps.setInt(3, object.getBestParte().getId());
-				ps.setInt(4, object.getId());
+				ps.setInt(1, object.getScore());
+				ps.setInt(2, object.getId());
+				ps.setInt(3, object.getUser().getId());
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
@@ -53,13 +56,13 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 	}
 
 	@Override
-	public List<User> findAll() {
-		List<User> objects = new ArrayList<User>();
+	public List<Partie> findAll() {
+		List<Partie> objects = new ArrayList<Partie>();
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(UserBean.getObject(rs));
+				objects.add(PartieBean.getObject(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -67,14 +70,14 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 	}
 
 	@Override
-	public User findById(Integer integer) {
-		User object = null;
+	public Partie findById(Integer integer) {
+		Partie object = null;
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = UserBean.getObject(rs);
+					object = PartieBean.getObject(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -91,19 +94,5 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	public User authenticate(String login, String password ) throws SQLException {
-		User user = null;
-		try ( Connection connection = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
-			  PreparedStatement ps = connection.prepareStatement(AUTHENT_QUERY) ) {
-			ps.setString( 1, login );
-			ps.setString( 2, password );
-			try ( ResultSet rs = ps.executeQuery() ) {
-				if ( rs.next() )
-					user = UserBean.getObject(rs);
-			}
-		}
-		return user;
 	}
 }

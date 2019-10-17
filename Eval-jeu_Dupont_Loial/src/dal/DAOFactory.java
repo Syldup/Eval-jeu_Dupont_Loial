@@ -1,5 +1,7 @@
 package dal;
 
+import bo.Calcul;
+import bo.Partie;
 import bo.User;
 
 import javax.servlet.ServletContext;
@@ -21,22 +23,43 @@ public class DAOFactory {
 				dbLogin = context.getInitParameter( "DB_LOGIN" );
 				dbPwd = context.getInitParameter( "DB_PWD" );
 				break;
-			case "JPA":
 			default:
 				//TODO
 		}
 	}
-	
+
 	public static IDAO<Integer, User> getUserDAO() {
-		IDAO<Integer, User> dao;
+		IDAO<Integer, User> dao = null;
 		switch ( mode ) {
 			case "JDBC" :
 				dao = new UserDAOJDBC(dbUrl, dbLogin, dbPwd);
 				break;
-			case "JPA" :
 			default:
 				//TODO
-				dao = null;
+		}
+		return dao;
+	}
+
+	public static IDAO<Integer, Partie> getPartieDAO() {
+		IDAO<Integer, Partie> dao = null;
+		switch ( mode ) {
+			case "JDBC" :
+				dao = new PartieDAOJDBC(dbUrl, dbLogin, dbPwd);
+				break;
+			default:
+				//TODO
+		}
+		return dao;
+	}
+
+	public static IDAO<Integer, Calcul> getCalculDAO() {
+		IDAO<Integer, Calcul> dao = null;
+		switch ( mode ) {
+			case "JDBC" :
+				dao = new CalculDAOJDBC(dbUrl, dbLogin, dbPwd);
+				break;
+			default:
+				//TODO
 		}
 		return dao;
 	}

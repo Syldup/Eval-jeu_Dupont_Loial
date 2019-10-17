@@ -9,6 +9,19 @@ public class Partie {
     private User user;
     private List<Calcul> calculs;
 
+    public Partie(int id, int score, String date, User user) {
+        this.id = id;
+        this.score = score;
+        this.date = date;
+        this.user = user;
+    }
+
+    public Partie(int score, String date, User user) {
+        this.score = score;
+        this.date = date;
+        this.user = user;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
