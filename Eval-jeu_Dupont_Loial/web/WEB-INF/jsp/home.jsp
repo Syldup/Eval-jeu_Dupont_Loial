@@ -10,6 +10,10 @@
 	<body>
 		<div class="wrap-back">
 			<div class="wrap-front">
+				<form method="GET" action="question">
+					<input type="submit" class="button" value="Question">
+					<div class="hr"></div>
+				</form>
 			</div>
 		</div>
 		<script src="<%= request.getContextPath()%>/vendor/bootstrap.min.js"></script>

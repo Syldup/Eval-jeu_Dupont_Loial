@@ -26,5 +26,4 @@ public class HomeController extends HttpServlet {
 	public HomeController() {
 		LOGGER.log( Level.INFO, "Je suis dans le constructeur !" );
 	}
-
 }

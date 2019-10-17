@@ -4,10 +4,14 @@ import java.util.List;
 
 public class Partie {
     private int id = 0;
-    private int score;
+    private int score = 0;
     private String date;
     private User user;
     private List<Calcul> calculs;
+
+    public Partie(User user) {
+        this.user = user;
+    }
 
     public Partie(int id, int score, String date, User user) {
         this.id = id;
@@ -35,6 +39,6 @@ public class Partie {
     public void setUser(User user) { this.user = user; }
 
     public List<Calcul> getCalculs() { return calculs; }
-
+    public void addCalcul(Calcul calcul) { calculs.add(calcul); }
     public void setCalculs(List<Calcul> calculs) { this.calculs = calculs; }
 }

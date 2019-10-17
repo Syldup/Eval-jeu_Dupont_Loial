@@ -7,7 +7,7 @@ public class Operateur {
     private List<String> opUnaire;
     private List<String> opBinaire;
 
-    public Operateur (String equation) {
+    public Operateur () {
         opUnaire = new ArrayList<String>();
         opUnaire.add("inv");
         opUnaire.add("rac");
@@ -140,5 +140,9 @@ public class Operateur {
             } else pile.push(pile.pop());
         }
         return sb.toString();
+    }
+
+    public void createExpretion() {
+        pile = getExpretion(5);
     }
 }
