@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserBean {
+
     public static User getUser(ResultSet rs) {
         int id;
         try { id = rs.getInt("idUser"); }
