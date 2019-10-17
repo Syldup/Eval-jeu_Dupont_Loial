@@ -10,11 +10,11 @@ import java.io.Serializable;
 import java.sql.SQLException;
 
 public class LoginBean implements Serializable {
-	
+
+	public static final String ATT_AUTH_SESSION = "isConntected";
 	private static final String FORM_FIELD_LOGIN = "form-login";
 	private static final String FORM_FIELD_PWD = "form-pwd";
 	private static final String FORM_FIELD_CONF_PWD = "form-pwd2";
-	public static final String ATT_AUTH_SESSION = "isConntected";
 	
 	private String login;
 	private String pwd;
@@ -46,9 +46,9 @@ public class LoginBean implements Serializable {
 	}
 
 	public void suscribe(HttpServletRequest request){
-		login=request.getParameter(FORM_FIELD_LOGIN);
-		pwd=request.getParameter(FORM_FIELD_PWD);
-		pwd2=request.getParameter(FORM_FIELD_CONF_PWD);
+		login = request.getParameter(FORM_FIELD_LOGIN);
+		pwd = request.getParameter(FORM_FIELD_PWD);
+		pwd2 = request.getParameter(FORM_FIELD_CONF_PWD);
 		UserDAOJDBC dao=(UserDAOJDBC)DAOFactory.getUserDAO();
 		User user=null;
 

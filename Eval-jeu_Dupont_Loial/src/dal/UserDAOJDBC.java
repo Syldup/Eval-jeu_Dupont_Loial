@@ -60,7 +60,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(UserBean.getUser(rs));
+				objects.add(UserBean.getObject(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -75,7 +75,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = UserBean.getUser(rs);
+					object = UserBean.getObject(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -100,7 +100,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
              Statement s = conn.createStatement();
              ResultSet rs = s.executeQuery(TOP_PLAYER_DISPLAY)) {
             while (rs.next())
-                objects.add(UserBean.getUser(rs));
+                objects.add(UserBean.getObject(rs));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -115,7 +115,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setString( 2, password );
 			try ( ResultSet rs = ps.executeQuery() ) {
 				if ( rs.next() )
-					user = UserBean.getUser(rs);
+					user = UserBean.getObject(rs);
 			}
 		}
 		return user;

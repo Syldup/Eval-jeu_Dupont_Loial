@@ -13,8 +13,8 @@ public class LoginFilter implements Filter {
 	
 	@Override
 	public void doFilter( ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain ) throws IOException, ServletException {
-		
 		HttpSession session = ((HttpServletRequest)servletRequest).getSession(  );
+
 		if ( null == session || null == session.getAttribute( LoginBean.ATT_AUTH_SESSION )) {
 			((HttpServletRequest)servletRequest).getRequestDispatcher( "login" ).forward( servletRequest, servletResponse );
 		} else {

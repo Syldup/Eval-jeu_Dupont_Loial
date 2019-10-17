@@ -8,6 +8,12 @@ public class Calcul {
     private String date;
     private Partie partie;
 
+    public Calcul(String calcul, String resultat, Partie partie) {
+        this.calcul = calcul;
+        this.resultat = resultat;
+        this.partie = partie;
+    }
+
     public Calcul(String calcul, String resultat, String reponce, String date, Partie partie) {
         this.calcul = calcul;
         this.resultat = resultat;
