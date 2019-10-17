@@ -13,7 +13,7 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 	
 	private static final String PAGE_LOGIN_JSP = "/WEB-INF/jsp/login.jsp";
-	private static final String PAGE_HOME_JSP = "/";
+	private static final String PAGE_HOME_JSP = "/home";
 	
 	@Override
 	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
@@ -28,14 +28,17 @@ public class LoginController extends HttpServlet {
 	
 	@Override
 	protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
+        LoginBean model = new LoginBean();
 
-		LoginBean model = new LoginBean();
-	//	model.authenticate( request );
-	//	request.setAttribute( "loginBean", model );
-
-
-		model.suscribe(request);
-		request.setAttribute("loginBean",model);
-		doGet( request, response );
+	    if(request.getParameter("form-pwd2")==null) {
+            model.authenticate(request);
+            request.setAttribute("loginBean", model);
+            System.out.println("test");
+        }else {
+            model.suscribe(request);
+            request.setAttribute("loginBean", model);
+            System.out.println("test2");
+        }
+        doGet(request, response);
 	}
 }

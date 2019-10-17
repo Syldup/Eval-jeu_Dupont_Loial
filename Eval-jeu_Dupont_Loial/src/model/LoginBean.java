@@ -33,7 +33,7 @@ public class LoginBean implements Serializable {
 			
 			if ( user != null ) {
 				HttpSession session = request.getSession( true );
-				//TODO récupération et incrémentation du nombre de connexions
+
 				session.setAttribute( ATT_AUTH_SESSION, user );
 				authentResult = "Authentification réussie : Bienvenue " + login;
 			} else {
@@ -55,15 +55,17 @@ public class LoginBean implements Serializable {
 		if(pwd.equals(pwd2) && user==null){
 			try{
 			    user = new User();
-				user.setUsername(FORM_FIELD_LOGIN);
-				user.setPassword(FORM_FIELD_PWD);
+				user.setUsername(login);
+				user.setPassword(pwd);
 				dao.create(user);
                 authentResult="Sa marche";
 			}catch(Exception e){
 			    e.printStackTrace();
                 authentResult="Sa ne fonctionne pas";
 			}
-		}
+		}else {
+            authentResult="Le mot doit passe doit être identique";
+        }
 
 	}
 	
