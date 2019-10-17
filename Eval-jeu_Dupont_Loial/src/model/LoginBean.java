@@ -49,18 +49,18 @@ public class LoginBean implements Serializable {
 		UserDAOJDBC dao=(UserDAOJDBC)DAOFactory.getUserDAO();
 		User user=null;
 
-		if(pwd.equals(pwd2) && user==null){
-			try{
+		if (pwd.equals(pwd2) && user==null) {
+			try {
 			    user = new User();
-				user.setUsername(FORM_FIELD_LOGIN);
-				user.setPassword(FORM_FIELD_PWD);
+				user.setUsername(login);
+				user.setPassword(pwd);
 				dao.create(user);
                 authentResult="Sa marche";
-			}catch(Exception e){
+			} catch(Exception e){
 			    e.printStackTrace();
-                authentResult="Sa ne fonctionne pas";
+          authentResult="Sa ne fonctionne pas";
 			}
-		}
+		} else authentResult="Le mot doit passe doit être identique";
 	}
 	
 	public boolean isConnected( HttpServletRequest req ) {

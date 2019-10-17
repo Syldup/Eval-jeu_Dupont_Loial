@@ -23,7 +23,7 @@ public class LoginController extends HttpServlet {
 			model = new LoginBean();
 		req.setAttribute("loginBean", model);
 		if ( model.isConnected( req ) ) {
-			resp.sendRedirect( req.getContextPath()+ PAGE_HOME );
+			resp.sendRedirect( req.getContextPath() + PAGE_HOME );
 		} else {
 			req.getRequestDispatcher( PAGE_LOGIN_JSP ).forward( req, resp );
 		}
