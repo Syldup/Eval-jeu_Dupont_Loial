@@ -16,6 +16,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 	private static final String FIND_ALL_QUERY = "SELECT idUser, username, idbestpartie FROM user";
 	private static final String FIND_BY_ID_QUERY = "SELECT idUser, username, idbestpartie FROM user WHERE idUser=?";
 	private static final String DELETE_QUERY = "DELETE FROM user WHERE idUser=?";
+	private static final String TOP_PLAYER_DISPLAY = "SELECT username, score FROM user, partie WHERE user.iduser=partie.iduser ORDER BY score DESC LIMIT 10";
 	
 	public UserDAOJDBC( String dbUrl, String dbLogin, String dbPwd ) {
 		super( dbUrl, dbLogin, dbPwd );
@@ -91,6 +92,19 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public List<User> topPlayer() throws SQLException{
+        List<User> objects = new ArrayList<User>();
+        try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
+             Statement s = conn.createStatement();
+             ResultSet rs = s.executeQuery(TOP_PLAYER_DISPLAY)) {
+            while (rs.next())
+                objects.add(UserBean.getUser(rs));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return objects;
 	}
 
 	public User authenticate(String login, String password ) throws SQLException {

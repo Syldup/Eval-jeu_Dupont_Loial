@@ -28,10 +28,14 @@ public class LoginController extends HttpServlet {
 	
 	@Override
 	protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
-		
+
 		LoginBean model = new LoginBean();
-		model.authenticate( request );
-		request.setAttribute( "loginBean", model );
+	//	model.authenticate( request );
+	//	request.setAttribute( "loginBean", model );
+
+
+		model.suscribe(request);
+		request.setAttribute("loginBean",model);
 		doGet( request, response );
 	}
 }
