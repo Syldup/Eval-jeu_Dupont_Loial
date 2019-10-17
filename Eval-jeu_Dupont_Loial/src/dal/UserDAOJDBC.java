@@ -100,7 +100,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
              Statement s = conn.createStatement();
              ResultSet rs = s.executeQuery(TOP_PLAYER_DISPLAY)) {
             while (rs.next())
-                objects.add(UserBean.getUser(rs));
+                objects.add(UserBean.getObject(rs));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
