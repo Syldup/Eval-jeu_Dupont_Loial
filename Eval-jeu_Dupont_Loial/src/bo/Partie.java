@@ -1,5 +1,7 @@
 package bo;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,25 @@ public class Partie {
         this.score = score;
         this.date = date;
         this.user = user;
+    }
+
+    public Partie(ResultSet rs) {
+        try { id = rs.getInt("idpartie"); }
+        catch (SQLException e) { id = 0; }
+
+        try { score = rs.getInt("score"); }
+        catch (SQLException e) { score = 0; }
+
+        try { date = rs.getString("date"); }
+        catch (SQLException e) { date = ""; }
+    }
+
+    public static Partie getInstance(ResultSet rs, User user) {
+        Partie partie = new Partie( rs );
+        if (partie.getId() == 0)
+            return null;
+        partie.setUser(user);
+        return partie;
     }
 
     public int getId() { return id; }

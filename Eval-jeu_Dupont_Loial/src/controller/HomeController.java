@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/home"})
+@WebServlet( urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
 
 	private static final String PAGE_HOME_JSP = "/WEB-INF/jsp/home.jsp";

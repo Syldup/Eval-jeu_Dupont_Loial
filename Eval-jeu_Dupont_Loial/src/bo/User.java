@@ -1,6 +1,8 @@
 package bo;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class User implements Serializable {
 	private int id = 0;
@@ -21,6 +23,16 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public User(ResultSet rs) {
+		try { id = rs.getInt("iduser"); }
+		catch (SQLException e) { id = 0; }
+
+		try { username = rs.getString("username"); }
+		catch (SQLException e) { username = ""; }
+
+		bestParte = Partie.getInstance( rs, this );
+	}
+
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
 
@@ -32,4 +44,5 @@ public class User implements Serializable {
 
 	public Partie getBestParte() { return bestParte; }
 	public void setBestParte(Partie bestParte) { this.bestParte = bestParte; }
+
 }

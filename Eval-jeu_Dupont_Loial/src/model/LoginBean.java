@@ -22,9 +22,7 @@ public class LoginBean implements Serializable {
 	private String authentResult;
 	private User curUser;
 	
-	private LoginBean() {
-		curUser = null;
-	}
+	private LoginBean() {}
 
 	public static LoginBean getInstence( HttpServletRequest req ) {
 		HttpSession session = req.getSession(true);
@@ -85,7 +83,7 @@ public class LoginBean implements Serializable {
 			}
 		} else authentResult = "Les deux mots de passe doivent être identique !";
 	}
-	
+
 	public boolean isConnected() {
 		return curUser != null;
 	}
@@ -93,8 +91,14 @@ public class LoginBean implements Serializable {
 	public String getLogin() {
 		return login;
 	}
-
 	public String getAuthentResult() {
 		return authentResult;
 	}
+	public User getCurUser() { return curUser; }
+
+	public String getFormFieldLogin() { return FORM_FIELD_LOGIN; }
+	public String getFormFieldPwd() { return FORM_FIELD_PWD; }
+	public String getFormFieldConfPwd() { return FORM_FIELD_CONF_PWD; }
+	public String getFormFieldType() { return FORM_FIELD_TYPE; }
+
 }

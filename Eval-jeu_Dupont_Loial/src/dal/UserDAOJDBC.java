@@ -1,7 +1,6 @@
 package dal;
 
 import bo.User;
-import model.UserBean;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,13 +8,13 @@ import java.util.List;
 
 public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 	
-	private static final String AUTHENT_QUERY = "SELECT idUser, username, idbestpartie FROM user WHERE username = ? AND password = ?";
+	private static final String AUTHENT_QUERY = "SELECT user.iduser, username, idpartie, score, date FROM user LEFT JOIN partie ON idbestpartie=idpartie WHERE username = ? AND password = ?";
 	private static final String INSERT_QUERY = "INSERT INTO user (username, password) VALUES (?, ?)";
 	private static final String UPDATE_QUERY = "UPDATE user SET username=?, password=?, idbestpartie=? WHERE idUser=?";
-	private static final String FIND_ALL_QUERY = "SELECT idUser, username, idbestpartie FROM user";
-	private static final String FIND_BY_ID_QUERY = "SELECT idUser, username, idbestpartie FROM user WHERE idUser=?";
+	private static final String FIND_ALL_QUERY = "SELECT user.iduser, username, idpartie, score, date FROM user LEFT JOIN partie ON idbestpartie=idpartie";
+	private static final String FIND_BY_ID_QUERY = "SELECT user.iduser, username, idpartie, score, date FROM user LEFT JOIN partie ON idbestpartie=idpartie WHERE user.idUser=?";
 	private static final String DELETE_QUERY = "DELETE FROM user WHERE idUser=?";
-	private static final String TOP_PLAYER_DISPLAY = "SELECT username, score FROM user, partie WHERE user.iduser=partie.iduser ORDER BY score DESC LIMIT 10";
+	private static final String TOP_PLAYER_DISPLAY = "SELECT user.iduser, username, idpartie, score, date FROM user LEFT JOIN partie ON idbestpartie=idpartie ORDER BY score DESC LIMIT 10";
 	
 	public UserDAOJDBC( String dbUrl, String dbLogin, String dbPwd ) {
 		super( dbUrl, dbLogin, dbPwd );
@@ -59,7 +58,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(UserBean.getFromResultSet(rs));
+				objects.add(new User( rs ));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -74,7 +73,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = UserBean.getFromResultSet(rs);
+					object = new User( rs );
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -99,7 +98,7 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
              Statement s = conn.createStatement();
              ResultSet rs = s.executeQuery(TOP_PLAYER_DISPLAY)) {
             while (rs.next())
-                objects.add(UserBean.getFromResultSet(rs));
+                objects.add(new User( rs ));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -113,8 +112,9 @@ public class UserDAOJDBC extends DAOJDBC<Integer, User> {
 			ps.setString( 1, login );
 			ps.setString( 2, password );
 			try ( ResultSet rs = ps.executeQuery() ) {
-				if ( rs.next() )
-					user = UserBean.getFromResultSet(rs);
+				if ( rs.next() ) {
+					user = new User(rs);
+				}
 			}
 		}
 		return user;

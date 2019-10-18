@@ -1,9 +1,6 @@
 package controller;
 
-import bo.Calcul;
-import bo.Partie;
-import model.CalculBean;
-import model.PartieBean;
+import model.QuestionBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,32 +9,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/question"})
+@WebServlet( urlPatterns = {"/question"})
 public class QuestionController extends HttpServlet {
 
-	private static final String PAGE_HOME_JSP = "/persons_list";
 	private static final String PAGE_QUEST_JSP = "/WEB-INF/jsp/question.jsp";
+	private static final String PAGE_HOME = "/home";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse response ) throws ServletException, IOException {
+		QuestionBean model = QuestionBean.getInstence( req );
 
-		Partie partie = PartieBean.getPartieFromSession( req );
+		model.initPartie();
 
-		Calcul calcul = CalculBean.newCalcul(partie);
-		req.setAttribute(CalculBean.ATT_CALCUL_SESSION , calcul);
-
-		if ( partie.getCalculs().size() <= 10 )
-			req.getRequestDispatcher( PAGE_QUEST_JSP ).forward( req, response );
-		else
-			response.sendRedirect( req.getContextPath() + PAGE_HOME_JSP );
+		if ( model.getCalculCount() < 10 ) {
+			model.initCalcul();
+			req.getRequestDispatcher(PAGE_QUEST_JSP).forward(req, response);
+		} else
+			response.sendRedirect( req.getContextPath() + PAGE_HOME );
 	}
 
 	@Override
 	protected void doPost( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
-		if (req.getParameter( CalculBean.FORM_FIELD_REPONCE ) != null) {
-			Calcul calcul = CalculBean.getFromRequest(req);
-			CalculBean.save(calcul);
-		}
+		QuestionBean model = QuestionBean.getInstence( req );
+
+		model.processForm( req );
+
 		doGet( req, resp );
 	}
 }

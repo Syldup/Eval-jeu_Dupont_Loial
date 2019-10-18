@@ -1,4 +1,4 @@
-<jsp:useBean id="curCalcul" scope="request" type="bo.Calcul"/>
+<jsp:useBean id="questBean" scope="session" type="model.QuestionBean"/>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 	<head>
@@ -13,9 +13,9 @@
 			<div class="wrap-front">
 				<form method="POST" action="question">
 					<div class="group">
-						<input type="hidden" value="${curCalcul.resultat}"/>
-						<label for="pass" class="label">${curCalcul.calcul}</label>
-						<input id="pass" type="text" class="input" name="form-reponse" value="" required/>
+						<input type="hidden" value="${questBean.resultat}"/>
+						<label for="pass" class="label">${questBean.calcul}</label>
+						<input id="pass" type="text" class="input" name="${questBean.formFieldResp}" value="" required/>
 					</div>
 					<div class="group">
 						<input type="submit" class="button" value="Suivent">

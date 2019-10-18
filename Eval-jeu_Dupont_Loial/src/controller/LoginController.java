@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet( urlPatterns = {"/login"} )
+@WebServlet( urlPatterns = {"/", ""} )
 public class LoginController extends HttpServlet {
 	
 	private static final String PAGE_LOGIN_JSP = "/WEB-INF/jsp/login.jsp";

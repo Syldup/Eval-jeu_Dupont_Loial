@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-//@WebFilter(urlPatterns = {"/persons", "/persons/*"})
+@WebFilter(urlPatterns = {"/auth/*"})
 public class LoginFilter implements Filter {
 	
 	@Override
@@ -16,7 +16,7 @@ public class LoginFilter implements Filter {
 		HttpSession session = ((HttpServletRequest)servletRequest).getSession(  );
 
 		if ( null == session || null == session.getAttribute( LoginBean.ATT_AUTH_SESSION )) {
-			((HttpServletRequest)servletRequest).getRequestDispatcher( "login" ).forward( servletRequest, servletResponse );
+			servletRequest.getRequestDispatcher( "/login" ).forward( servletRequest, servletResponse );
 		} else {
 			filterChain.doFilter( servletRequest, servletResponse );
 		}

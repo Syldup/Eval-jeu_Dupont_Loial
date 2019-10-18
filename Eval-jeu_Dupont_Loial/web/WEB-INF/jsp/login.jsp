@@ -19,36 +19,36 @@
 				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Connection</label>
 				<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Inscription</label>
 				<div class="login-form">
-					<form class="sign-in-htm" method="POST" action="login">
+					<form class="sign-in-htm" method="POST" action="">
 						<div class="group">
 							<label for="user" class="label">Identifient</label>
-							<input id="user" type="text" class="input" name="form-login" value="${loginBean.login}"/>
+							<input id="user" type="text" class="input" name="${loginBean.formFieldLogin}" value="${loginBean.login}"/>
 						</div>
 						<div class="group">
 							<label for="pass" class="label">Mot de passe</label>
-							<input id="pass" type="password" class="input" data-type="password" name="form-pwd">
+							<input id="pass" type="password" class="input" data-type="password" name="${loginBean.formFieldPwd}">
 						</div>
 						<div class="group">
-							<input type="hidden" name="form-type" value="sign-in-form"/>
+							<input type="hidden" name="${loginBean.formFieldType}" value="sign-in-form"/>
 							<input type="submit" class="button" value="Se connecter">
 						</div>
 						<div class="hr"></div>
 					</form>
-					<form class="sign-up-htm" method="POST" action="login">
+					<form class="sign-up-htm" method="POST" action="">
 						<div class="group">
 							<label for="user2" class="label">Identifient</label>
-							<input id="user2" type="text" class="input" name="form-login" value="${loginBean.login}"/>
+							<input id="user2" type="text" class="input" name="${loginBean.formFieldLogin}" value="${loginBean.login}"/>
 						</div>
 						<div class="group">
 							<label for="pass2" class="label">Mot de passe</label>
-							<input id="pass2" type="password" class="input" data-type="password" name="form-pwd">
+							<input id="pass2" type="password" class="input" data-type="password" name="${loginBean.formFieldPwd}">
 						</div>
 						<div class="group">
 							<label for="pass3" class="label">Mot de passe</label>
-							<input id="pass3" type="password" class="input" data-type="password" name="form-pwd2">
+							<input id="pass3" type="password" class="input" data-type="password" name="${loginBean.formFieldConfPwd}">
 						</div>
 						<div class="group">
-							<input type="hidden" name="form-type" value="sign-up-form"/>
+							<input type="hidden" name="${loginBean.formFieldType}" value="sign-up-form"/>
 							<input type="submit" class="button" value="S'inscrire">
 						</div>
 						<div class="hr"></div>

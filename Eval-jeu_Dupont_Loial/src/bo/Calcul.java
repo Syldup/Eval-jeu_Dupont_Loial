@@ -1,6 +1,8 @@
 package bo;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Calcul implements Serializable {
     private int id = 0;
@@ -23,6 +25,23 @@ public class Calcul implements Serializable {
         this.reponce = reponce;
         this.date = date;
         this.partie = partie;
+    }
+
+    public Calcul(ResultSet rs) {
+        try { id = rs.getInt("idcalcul"); }
+        catch (SQLException e) { id = 0; }
+
+        try { calcul = rs.getString("calcul"); }
+        catch (SQLException e) { calcul = ""; }
+
+        try { resultat = rs.getString("resultat"); }
+        catch (SQLException e) { resultat = ""; }
+
+        try { reponce = rs.getString("reponce"); }
+        catch (SQLException e) { reponce = ""; }
+
+        try { date = rs.getString("date"); }
+        catch (SQLException e) { date = ""; }
     }
 
     public int getId() { return id; }

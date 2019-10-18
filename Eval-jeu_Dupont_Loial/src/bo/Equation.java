@@ -6,9 +6,10 @@ public class Equation {
     private String expretion;
     public Equation () { }
 
-    public void createExpretion(int len) {
+    public void createExpretion() {
         StringBuilder sb = new StringBuilder();
         sb.append(Rmd.getNumber(Rmd.getInt(0, 10)));
+        int len = Rmd.getInt(2, 6);
         while (len > 0) {
             len--;
             Operateur.addRmdTo(sb);

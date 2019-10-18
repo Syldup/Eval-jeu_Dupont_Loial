@@ -1,7 +1,6 @@
 package dal;
 
 import bo.Calcul;
-import model.CalculBean;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,6 +16,12 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 
 	public CalculDAOJDBC(String dbUrl, String dbLogin, String dbPwd ) {
 		super( dbUrl, dbLogin, dbPwd );
+	}
+
+	public void save(Calcul calcul) {
+		if (calcul.getId() == 0)
+			 create(calcul);
+		else update(calcul);
 	}
 
 	@Override
@@ -59,7 +64,7 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
-				objects.add(CalculBean.getFromResultSet(rs));
+				objects.add(new Calcul(rs));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -74,7 +79,7 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 			ps.setInt(1, integer);
 			try(ResultSet rs = ps.executeQuery();) {
 				if (rs.next())
-					object = CalculBean.getFromResultSet(rs);
+					object = new Calcul(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

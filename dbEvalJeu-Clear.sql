@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 17 oct. 2019 à 06:48
+-- Généré le :  ven. 18 oct. 2019 à 23:19
 -- Version du serveur :  5.7.26
 -- Version de PHP :  7.2.18
 
@@ -21,6 +21,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `dbevaljeu`
 --
+DROP DATABASE IF EXISTS `dbevaljeu`;
 CREATE DATABASE IF NOT EXISTS `dbevaljeu` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `dbevaljeu`;
 
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `calcul` (
   `resultat` varchar(45) DEFAULT NULL,
   `reponce` varchar(45) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
-  `idpartie` int(11) NOT NULL,
+  `idpartie` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`idcalcul`),
   UNIQUE KEY `idcalcul_UNIQUE` (`idcalcul`),
   KEY `fk_calcul_partie1_idx` (`idpartie`)
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `calcul` (
 
 DROP TABLE IF EXISTS `partie`;
 CREATE TABLE IF NOT EXISTS `partie` (
-  `idpartie` int(11) NOT NULL,
+  `idpartie` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `score` int(11) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
   `iduser` int(10) UNSIGNED NOT NULL,
@@ -70,9 +71,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `iduser` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` varchar(45) DEFAULT NULL,
   `password` varchar(45) DEFAULT NULL,
-  `idbestpartie` int(11) NOT NULL,
+  `idbestpartie` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`iduser`),
-  UNIQUE KEY `iduser_UNIQUE` (`iduser`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_user_partie1_idx` (`idbestpartie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
