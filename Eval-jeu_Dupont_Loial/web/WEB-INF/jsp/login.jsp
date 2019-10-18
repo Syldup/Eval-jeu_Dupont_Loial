@@ -1,4 +1,4 @@
-<jsp:useBean id="loginBean" scope="request" type="model.LoginBean"/>
+<jsp:useBean id="loginBean" scope="session" type="model.LoginBean"/>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 	<head>
@@ -29,6 +29,7 @@
 							<input id="pass" type="password" class="input" data-type="password" name="form-pwd">
 						</div>
 						<div class="group">
+							<input type="hidden" name="form-type" value="sign-in-form"/>
 							<input type="submit" class="button" value="Se connecter">
 						</div>
 						<div class="hr"></div>
@@ -47,6 +48,7 @@
 							<input id="pass3" type="password" class="input" data-type="password" name="form-pwd2">
 						</div>
 						<div class="group">
+							<input type="hidden" name="form-type" value="sign-up-form"/>
 							<input type="submit" class="button" value="S'inscrire">
 						</div>
 						<div class="hr"></div>

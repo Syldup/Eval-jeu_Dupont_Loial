@@ -17,28 +17,19 @@ public class LoginController extends HttpServlet {
 	
 	@Override
 	protected void doGet( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
+		LoginBean model = LoginBean.getInstence( req );
 
-		LoginBean model = (LoginBean) req.getAttribute( "loginBean" );
-		if (model == null)
-			model = new LoginBean();
-		req.setAttribute("loginBean", model);
-		if ( model.isConnected( req ) ) {
+		if ( model.isConnected() )
 			resp.sendRedirect( req.getContextPath() + PAGE_HOME );
-		} else {
+		else
 			req.getRequestDispatcher( PAGE_LOGIN_JSP ).forward( req, resp );
-		}
 	}
 	
 	@Override
 	protected void doPost( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
+		LoginBean model = LoginBean.getInstence( req );
 
-		LoginBean model = new LoginBean();
-	 	model.authenticate( req );
-		req.setAttribute( "loginBean", model );
-
-
-		model.suscribe(req);
-		req.setAttribute("loginBean",model);
+	 	model.processForm( req );
 		doGet( req, resp );
 	}
 }

@@ -7,66 +7,87 @@ import dal.UserDAOJDBC;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.sql.SQLException;
 
 public class LoginBean implements Serializable {
 
 	public static final String ATT_AUTH_SESSION = "isConntected";
+	private static final String ATT_SESSION = "loginBean";
 	private static final String FORM_FIELD_LOGIN = "form-login";
 	private static final String FORM_FIELD_PWD = "form-pwd";
 	private static final String FORM_FIELD_CONF_PWD = "form-pwd2";
-	
+	private static final String FORM_FIELD_TYPE = "form-type";
+
 	private String login;
+	private String pwd;
 	private String authentResult;
+	private User curUser;
 	
-	public LoginBean() {}
+	private LoginBean() {
+		curUser = null;
+	}
+
+	public static LoginBean getInstence( HttpServletRequest req ) {
+		HttpSession session = req.getSession(true);
+		LoginBean model = (LoginBean) session.getAttribute( ATT_SESSION );
+		if (model == null) {
+			model = new LoginBean();
+			session.setAttribute(ATT_SESSION, model);
+		}
+		return model;
+	}
 	
-	public void authenticate( HttpServletRequest request ) {
-		login = request.getParameter( FORM_FIELD_LOGIN );
-		String pwd = request.getParameter( FORM_FIELD_PWD );
-		UserDAOJDBC dao = ( UserDAOJDBC ) DAOFactory.getUserDAO();
-		User user = null;
-		try {
-			user = dao.authenticate( login, pwd );
-			
-			if ( user != null ) {
-				HttpSession session = request.getSession( true );
-				session.setAttribute( ATT_AUTH_SESSION, user );
-				authentResult = "Authentification réussie : Bienvenue " + login;
-			} else {
-				authentResult = "Authentification échouée !!!";
-			}
-		} catch ( SQLException e ) {
-			System.out.println(e.getMessage());
-			authentResult = "Authentification échouée : Pb de connexion à la base de données !!! ";
+	public void processForm( HttpServletRequest req ) {
+		String formType = req.getParameter( FORM_FIELD_TYPE );
+
+		login = req.getParameter( FORM_FIELD_LOGIN );
+		pwd = req.getParameter( FORM_FIELD_PWD );
+		if (pwd == null || pwd == "")
+			formType = "login";
+
+		if (login == null || login == "")
+			formType = "login";
+
+		switch (req.getParameter( FORM_FIELD_TYPE )) {
+			case "sign-up-form": suscribe(req); break;
+			case "sign-in-form": authenticate(req); break;
+			default:
+				authentResult = "Le champ "+formType+" est vide !";
 		}
 	}
 
-	public void suscribe(HttpServletRequest request){
-		login = request.getParameter(FORM_FIELD_LOGIN);
-		String pwd = request.getParameter(FORM_FIELD_PWD);
-		String pwd2 = request.getParameter(FORM_FIELD_CONF_PWD);
-		UserDAOJDBC dao=(UserDAOJDBC)DAOFactory.getUserDAO();
-		User user=null;
+	private void authenticate( HttpServletRequest req ) {
+		UserDAOJDBC dao = ( UserDAOJDBC ) DAOFactory.getUserDAO();
+		try {
+			curUser = dao.authenticate( login, pwd );
 
-		if (pwd.equals(pwd2) && user==null) {
+			if ( curUser != null )
+				authentResult = "Bienvenue " + login;
+			else authentResult = "Authentification échouée !!!";
+		} catch ( Exception e ) {
+			System.out.println(e.getMessage());
+			authentResult = "Une erreur est survenue !";
+		}
+	}
+
+	private void suscribe(HttpServletRequest req){
+		String pwd = req.getParameter(FORM_FIELD_PWD);
+		String pwd2 = req.getParameter(FORM_FIELD_CONF_PWD);
+
+		if (pwd.equals(pwd2)) {
 			try {
-			    user = new User();
-				user.setUsername(login);
-				user.setPassword(pwd);
-				dao.create(user);
-                authentResult="Sa marche";
+				curUser = new User(login, pwd);
+				DAOFactory.getUserDAO().create(curUser);
+				authentResult = "Bienvenue " + login + " !";
 			} catch(Exception e){
 			    e.printStackTrace();
-          authentResult="Sa ne fonctionne pas";
+				curUser = null;
+          		authentResult = "Une erreur est survenue !";
 			}
-		} else authentResult="Le mot doit passe doit être identique";
+		} else authentResult = "Les deux mots de passe doivent être identique !";
 	}
 	
-	public boolean isConnected( HttpServletRequest req ) {
-		HttpSession session = req.getSession();
-		User connectedUser = ( User ) session.getAttribute( ATT_AUTH_SESSION );
-		return connectedUser != null;
+	public boolean isConnected() {
+		return curUser != null;
 	}
 
 	public String getLogin() {
