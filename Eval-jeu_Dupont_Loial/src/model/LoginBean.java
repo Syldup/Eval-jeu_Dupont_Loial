@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 public class LoginBean implements Serializable {
 
-	public static final String ATT_AUTH_SESSION = "isConntected";
 	private static final String ATT_SESSION = "loginBean";
 	private static final String FORM_FIELD_LOGIN = "form-login";
 	private static final String FORM_FIELD_PWD = "form-pwd";
@@ -19,7 +18,7 @@ public class LoginBean implements Serializable {
 
 	private String login;
 	private String pwd;
-	private String authentResult;
+	private String errResult;
 	private User curUser;
 	
 	private LoginBean() {}
@@ -31,6 +30,7 @@ public class LoginBean implements Serializable {
 			model = new LoginBean();
 			session.setAttribute(ATT_SESSION, model);
 		}
+		model.setErrResult("");
 		return model;
 	}
 	
@@ -49,7 +49,7 @@ public class LoginBean implements Serializable {
 			case "sign-up-form": suscribe(req); break;
 			case "sign-in-form": authenticate(req); break;
 			default:
-				authentResult = "Le champ "+formType+" est vide !";
+				errResult = "Le champ "+formType+" est vide !";
 		}
 	}
 
@@ -59,11 +59,11 @@ public class LoginBean implements Serializable {
 			curUser = dao.authenticate( login, pwd );
 
 			if ( curUser != null )
-				authentResult = "Bienvenue " + login;
-			else authentResult = "Authentification échouée !!!";
+				errResult = "Bienvenue " + login;
+			else errResult = "Authentification échouée !!!";
 		} catch ( Exception e ) {
 			System.out.println(e.getMessage());
-			authentResult = "Une erreur est survenue !";
+			errResult = "Une erreur est survenue !";
 		}
 	}
 
@@ -75,13 +75,13 @@ public class LoginBean implements Serializable {
 			try {
 				curUser = new User(login, pwd);
 				DAOFactory.getUserDAO().create(curUser);
-				authentResult = "Bienvenue " + login + " !";
+				errResult = "Bienvenue " + login + " !";
 			} catch(Exception e){
 			    e.printStackTrace();
 				curUser = null;
-          		authentResult = "Une erreur est survenue !";
+				errResult = "Une erreur est survenue !";
 			}
-		} else authentResult = "Les deux mots de passe doivent être identique !";
+		} else errResult = "Les deux mots de passe doivent être identique !";
 	}
 
 	public boolean isConnected() {
@@ -91,8 +91,8 @@ public class LoginBean implements Serializable {
 	public String getLogin() {
 		return login;
 	}
-	public String getAuthentResult() {
-		return authentResult;
+	public String getErrResult() {
+		return errResult;
 	}
 	public User getCurUser() { return curUser; }
 
@@ -100,5 +100,9 @@ public class LoginBean implements Serializable {
 	public String getFormFieldPwd() { return FORM_FIELD_PWD; }
 	public String getFormFieldConfPwd() { return FORM_FIELD_CONF_PWD; }
 	public String getFormFieldType() { return FORM_FIELD_TYPE; }
+
+	public void setErrResult(String errResult) {
+		this.errResult = errResult;
+	}
 
 }

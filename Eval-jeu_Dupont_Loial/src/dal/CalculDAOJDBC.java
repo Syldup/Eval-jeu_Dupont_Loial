@@ -18,14 +18,14 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 		super( dbUrl, dbLogin, dbPwd );
 	}
 
-	public void save(Calcul calcul) {
+	public void save(Calcul calcul) throws SQLException {
 		if (calcul.getId() == 0)
 			 create(calcul);
 		else update(calcul);
 	}
 
 	@Override
-	public void create(Calcul object) {
+	public void create(Calcul object) throws SQLException {
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, object.getCalcul());
@@ -37,13 +37,11 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 				if (rs.next())
 					object.setId(rs.getInt(1));
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 	}
 
 	@Override
-	public void update(Calcul object) {
+	public void update(Calcul object) throws SQLException {
 		if (object.getId() > 0)
 			try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 				 PreparedStatement ps = conn.prepareStatement(UPDATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -52,27 +50,23 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 				ps.setString(3, object.getReponce());
 				ps.setInt(4, object.getId());
 				ps.executeUpdate();
-			} catch (SQLException e) {
-				System.out.println(e.getMessage());
 			}
 	}
 
 	@Override
-	public List<Calcul> findAll() {
-		List<Calcul> objects = new ArrayList<Calcul>();
+	public List<Calcul> findAll() throws SQLException {
+		List<Calcul> objects = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
 				objects.add(new Calcul(rs));
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 		return objects;
 	}
 
 	@Override
-	public Calcul findById(Integer integer) {
+	public Calcul findById(Integer integer) throws SQLException {
 		Calcul object = null;
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -81,20 +75,16 @@ public class CalculDAOJDBC extends DAOJDBC<Integer, Calcul> {
 				if (rs.next())
 					object = new Calcul(rs);
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 		return object;
 	}
 
 	@Override
-	public void deleteById(Integer integer) {
+	public void deleteById(Integer integer) throws SQLException {
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(DELETE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, integer);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 	}
 }

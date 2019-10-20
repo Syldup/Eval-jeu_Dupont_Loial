@@ -17,10 +17,9 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public User(int id, String username, String password) {
+	public User(int id, String username) {
 		this.id = id;
 		this.username = username;
-		this.password = password;
 	}
 
 	public User(ResultSet rs) {
@@ -31,6 +30,19 @@ public class User implements Serializable {
 		catch (SQLException e) { username = ""; }
 
 		bestParte = Partie.getInstance( rs, this );
+	}
+
+	public static User getInstance(ResultSet rs ) {
+		int id;
+		try { id = rs.getInt("iduser"); }
+		catch (SQLException e) { id = 0; }
+
+		String username;
+		try { username = rs.getString("username"); }
+		catch (SQLException e) { username = ""; }
+
+		User user = new User( id, username );
+		return user;
 	}
 
 	public int getId() { return id; }
@@ -45,4 +57,8 @@ public class User implements Serializable {
 	public Partie getBestParte() { return bestParte; }
 	public void setBestParte(Partie bestParte) { this.bestParte = bestParte; }
 
+	@Override
+	public String toString() {
+		return username;
+	}
 }

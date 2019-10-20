@@ -1,4 +1,4 @@
-<jsp:useBean id="homebean" scope="session" type="model.HomeBean"/>
+<jsp:useBean id="homeBean" scope="session" type="model.HomeBean"/>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
@@ -11,71 +11,83 @@
 <body>
 <div class="wrap-back">
   <div class="wrap-front">
-		<!--input id="tab-1" type="radio" name="tab" checked><label for="tab-1" class="tab">Connection</label>
-		<input id="tab-2" type="radio" name="tab"><label for="tab-2" class="tab">Inscription</label>
+		  <div class="text-center mb-4">
+			  <h1>Liste du TOP 10</h1>
+		  </div>
+	  <input id="tab-1" type="radio" name="tab" <c:if test="${!homeBean.scorePerso}">checked</c:if>><label for="tab-1" class="tab">Tout le monde</label>
+	  <input id="tab-2" type="radio" name="tab" <c:if test="${homeBean.scorePerso}">checked</c:if>><label for="tab-2" class="tab">Personnel</label>
+	  <c:if test="${ !empty homeBean.errResult}">
+		  <div class="alert alert-warning" role="alert">
+			  <p>${homeBean.errResult}</p>
+		  </div>
+	  </c:if>
 		<div class="tab-group">
 			<div class="tab-1-htm">
+				<c:if test="${homeBean.listTopSize == 0}">
+					<div class="group">
+						<p>Aucun partie n'a été jouée !</p>
+					</div>
+				</c:if>
+				<c:if test="${homeBean.listTopSize != 0}">
+					<table class="table">
+						<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Score</th>
+						</tr>
+						</thead>
+						<tbody>
+						<c:forEach var="user" items="${ homeBean.listTop }" varStatus="status">
+							<tr>
+								<th scope="row">${status.index + 1}</th>
+								<td>${user.user}</td>
+								<td>${user.score}</td>
+							</tr>
+						</c:forEach>
+						</tbody>
+					</table>
+				</c:if>
 				<div class="group">
-					<label for="user">Identifient</label>
-					<input id="user" type="text" value="asasaasas"/>
-				</div>
-				<div class="group">
-					<label for="pass">Mot de passe</label>
-					<input id="pass" type="password" data-type="password">
-				</div>
-				<div class="group">
-					<input type="submit" value="Se connecter">
+					<form action="question" method="GET">
+						<input type="submit" class="button" value="${homeBean.valBtStart}">
+					</form>
 				</div>
 				<div class="hr"></div>
 			</div>
-			<form class="tab-2-htm" method="POST" action="">
-				<div class="group">
-					<label for="user2">Identifient</label>
-					<input id="user2" type="text" value="rfeerggettrtrthr"/>
-				</div>
-				<div class="group">
-					<label for="pass2">Mot de passe</label>
-					<input id="pass2" type="password" data-type="password">
-				</div>
-				<div class="group">
-					<label for="pass3">Mot de passe</label>
-					<input id="pass3" type="password" data-type="password">
-				</div>
-				<div class="group">
-					<input type="submit" value="S'inscrire">
-				</div>
-				<div class="hr"></div>
-			</form>
-		</div>
-		<form method="GET" action="question">
-			<input type="submit" value="Question">
-			<div class="hr"></div>
-		</form-->
-		<div class="callout large primary">
-			<div class="row column text-center">
-				<h1>Liste du TOP 10 des joueurs</h1>
-			</div>
-		</div>
-		<div class="row small-8 small-centered">
-			<table>
-				<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Score</th>
-				</tr>
-				</thead>
-				<tbody>
-				<c:forEach var="user" items="${ sessionScope.topListe }" varStatus="status">
+			<div class="tab-group2 tab-2-htm">
+				<c:if test="${homeBean.listTopPersoSize == 0}">
+					<div class="group">
+						<p>Aucun partie n'a été jouée !</p>
+					</div>
+				</c:if>
+				<c:if test="${homeBean.listTopPersoSize != 0}">
+				<table class="table">
+					<thead>
 					<tr>
-						<td>${user.username}</td>
-						<td>${user.bestParte}</td>
+						<th scope="col">#</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Score</th>
 					</tr>
-				</c:forEach>
-				</tbody>
-			</table>
-			<form action="question" method="get">
-				<input type="submit" class="button" value=" Question ">
-			</form>
+					</thead>
+					<tbody>
+					<c:forEach var="user" items="${ homeBean.listTopPerso }" varStatus="status">
+						<tr>
+							<th scope="row">${status.index + 1}</th>
+							<td>${user.user}</td>
+							<td>${user.score}</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+				</c:if>
+				<div class="group">
+					<form action="question" method="GET">
+						<input type="submit" class="button" value="${homeBean.valBtStart}">
+					</form>
+				</div>
+				<div class="hr"></div>
+			</div>
 		</div>
 	</div>
 </div>

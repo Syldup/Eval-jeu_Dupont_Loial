@@ -3,6 +3,7 @@ package bo;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Calcul implements Serializable {
     private int id = 0;
@@ -43,6 +44,21 @@ public class Calcul implements Serializable {
 
         try { date = rs.getString("date"); }
         catch (SQLException e) { date = ""; }
+    }
+
+    public boolean isCorrect() {
+        long factor = (long) Math.pow(10, 2);
+        Double rep;
+        try { rep = (double) (Math.round(Double.parseDouble(reponce)*factor))/factor; }
+        catch (Exception e) { rep = null; }
+
+        Double res;
+        try { res = (double) (Math.round(Double.parseDouble(resultat)*factor))/factor; }
+        catch (Exception e) { res = null; }
+
+        if (res == null || rep == null)
+            return Objects.equals(res, rep);
+        return rep.equals(res);
     }
 
     public int getId() { return id; }

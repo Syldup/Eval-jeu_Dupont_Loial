@@ -1,5 +1,8 @@
 package bo;
 
+import dal.DAOFactory;
+import dal.PartieDAOJDBC;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class Partie {
 
         try { date = rs.getString("date"); }
         catch (SQLException e) { date = ""; }
+
+        user = User.getInstance( rs );
     }
 
     public static Partie getInstance(ResultSet rs, User user) {
@@ -55,6 +60,16 @@ public class Partie {
     public void setUser(User user) { this.user = user; }
 
     public List<Calcul> getCalculs() { return calculs; }
-    public void addCalcul(Calcul calcul) { calculs.add(calcul); }
     public void setCalculs(List<Calcul> calculs) { this.calculs = calculs; }
+
+    public void addCalcul(Calcul calcul) {
+        calculs.add(calcul);
+        if (calcul.isCorrect())
+            score++;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d / %d", score, 10);
+    }
 }

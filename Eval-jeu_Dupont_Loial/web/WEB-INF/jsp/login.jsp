@@ -11,15 +11,15 @@
 	<body>
 		<div class="wrap-back">
 			<div class="wrap-front">
-				<c:if test="${ !empty loginBean.authentResult}">
+				<c:if test="${ !empty loginBean.errResult}">
 				<div class="alert alert-warning" role="alert">
-					<p>${loginBean.authentResult}</p>
+					<p>${loginBean.errResult}</p>
 				</div>
 				</c:if>
 				<input id="tab-1" type="radio" name="tab" checked><label for="tab-1" class="tab">Connection</label>
 				<input id="tab-2" type="radio" name="tab"><label for="tab-2" class="tab">Inscription</label>
 				<div class="tab-group">
-					<form class="tab-1-htm" method="POST" action="">
+					<form class="tab-group2 tab-1-htm" method="POST" action="">
 						<div class="group">
 							<label for="user" class="label">Identifient</label>
 							<input id="user" type="text" class="input" name="${loginBean.formFieldLogin}" value="${loginBean.login}"/>

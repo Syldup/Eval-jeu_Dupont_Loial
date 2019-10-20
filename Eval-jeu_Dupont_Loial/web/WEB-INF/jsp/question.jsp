@@ -11,15 +11,28 @@
 	<body>
 		<div class="wrap-back">
 			<div class="wrap-front">
-				<form method="POST" action="question">
+				<c:if test="${ !empty loginBean.errResult}">
+					<div class="alert alert-warning" role="alert">
+						<p>${loginBean.errResult}</p>
+					</div>
+				</c:if>
+				<div class="text-center mb-4">
+					<h1>Resoudre</h1>
+				</div>
+				<form class="tab-group" method="POST" action="question">
 					<div class="group">
 						<input type="hidden" value="${questBean.resultat}"/>
-						<label for="pass" class="label">${questBean.calcul}</label>
-						<input id="pass" type="text" class="input" name="${questBean.formFieldResp}" value="" required/>
+						<label for="resp">${questBean.calcul}</label>
+						<input id="resp" type="text" class="input" name="${questBean.formFieldResp}" required/>
 					</div>
 					<div class="group">
 						<input type="submit" class="button" value="Suivent">
 					</div>
+					<p>
+						<div>Ex :</div>
+						<div class="d-inline-block ml-2">6.17 * 2<br/>rac 2<br/>8 / 0<br/>rac -2</div>
+						<div class="d-inline-block ml-1">=>  12.34<br/>=>  1.41<br/>=>  NaN<br/>=>  NaN</div>
+					</p>
 					<div class="hr"></div>
 				</form>
 			</div>

@@ -1,5 +1,6 @@
 package controller;
 
+import model.HomeBean;
 import model.QuestionBean;
 
 import javax.servlet.ServletException;
@@ -22,6 +23,9 @@ public class QuestionController extends HttpServlet {
 			model.initCalcul();
 			req.getRequestDispatcher( PageFactory.getQuestJsp() ).forward(req, response);
 		} else {
+			model.exit( req );
+			HomeBean modelHome = HomeBean.getInstence(req);
+			modelHome.setScorePerso(true);
 			response.sendRedirect( PageFactory.getHomePath(req) );
 		}
 	}

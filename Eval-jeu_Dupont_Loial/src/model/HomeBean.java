@@ -1,15 +1,13 @@
 package model;
 
+import bo.Partie;
 import bo.User;
 import dal.DAOFactory;
-import dal.IDAO;
+import dal.PartieDAOJDBC;
 import dal.UserDAOJDBC;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,33 +15,76 @@ import java.util.List;
 
 public class HomeBean implements Serializable {
 
-private HomeBean(){}
+    private static final String ATT_SESSION = "homeBean";
 
-private static final String DISPPLAYER = "topListe";
-private static final String ATT_SESSION = "homebean";
-private static final String PAGE_QUEST = "/question";
-private static final String BUTTON_FORM="homeform";
+    private boolean scorePerso;
+    private String valBtStart;
+    private String errResult;
+    private List<Partie> listTop;
+    private List<Partie> listTopPerso;
 
-
+    private HomeBean(){
+        listTop = new ArrayList<>();
+        listTopPerso = new ArrayList<>();
+        valBtStart = "Démarrer le questionnaire";
+        scorePerso = false;
+    }
 
     public static HomeBean getInstence(HttpServletRequest req ) {
         HttpSession session = req.getSession(true);
         HomeBean model = (HomeBean) session.getAttribute( ATT_SESSION );
         if (model == null) {
-            LoginBean loginModel = LoginBean.getInstence( req );
             model = new HomeBean();
             session.setAttribute(ATT_SESSION, model);
         }
+        model.setErrResult("");
         return model;
     }
 
+    public void updateListTopPlayer() {
+        PartieDAOJDBC dao = (PartieDAOJDBC) DAOFactory.getPartieDAO();
+        listTop.clear();
+        try {
+            listTop = dao.getTopParty();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            errResult = "Une erreur est survenue !";
+        }
+    }
 
-public void dispListTopPlayer(HttpServletRequest request) throws SQLException {
+    public void updateListTopPlayerByUser(HttpServletRequest req ) {
+        LoginBean loginModel = LoginBean.getInstence( req );
+        PartieDAOJDBC dao = (PartieDAOJDBC) DAOFactory.getPartieDAO();
+        listTopPerso.clear();
+        try {
+            listTopPerso = dao.getTopParty(loginModel.getCurUser());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            errResult = "Une erreur est survenue !";
+        }
+    }
 
-    UserDAOJDBC dao = ( UserDAOJDBC ) DAOFactory.getUserDAO();
-    List<User> listtop=(ArrayList) request.getSession().getAttribute(DISPPLAYER);
-    listtop=dao.topPlayer();
-    request.getSession().setAttribute(DISPPLAYER,listtop);
-}
+    public String getErrResult() { return errResult; }
 
+    public void setErrResult(String errResult) {
+        this.errResult = errResult;
+    }
+
+    public List<Partie> getListTop() { return listTop; }
+    public List<Partie> getListTopPerso() { return listTopPerso; }
+
+    public int getListTopSize() { return listTop.size(); }
+    public int getListTopPersoSize() { return listTopPerso.size(); }
+
+    public String getValBtStart() { return valBtStart; }
+
+    public boolean isScorePerso() { return scorePerso; }
+
+    public void setScorePerso(boolean scorePerso) {
+        this.scorePerso = scorePerso;
+        if (scorePerso)
+            valBtStart = "Recommencer une partie";
+        else
+            valBtStart = "Démarrer le questionnaire";
+    }
 }

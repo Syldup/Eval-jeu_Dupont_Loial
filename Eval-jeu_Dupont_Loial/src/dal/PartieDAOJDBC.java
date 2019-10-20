@@ -14,13 +14,15 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 	private static final String FIND_ALL_QUERY = "SELECT * FROM partie LIMIT 10";
 	private static final String FIND_BY_ID_QUERY = "SELECT * FROM partie WHERE idpartie=?";
 	private static final String DELETE_QUERY = "DELETE FROM partie WHERE idpartie=?";
+	private static final String TOP_10_PARTIE = "SELECT user.iduser, username, idpartie, score, date FROM partie LEFT JOIN user ON partie.iduser=user.iduser ORDER BY score DESC LIMIT 10";
+	private static final String TOP_10_PARTIE_ID = "SELECT idpartie, score, date, iduser FROM partie WHERE iduser=? ORDER BY score DESC LIMIT 10";
 
 	public PartieDAOJDBC(String dbUrl, String dbLogin, String dbPwd ) {
 		super( dbUrl, dbLogin, dbPwd );
 	}
 
 	@Override
-	public void create(Partie object) {
+	public void create(Partie object) throws SQLException {
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, object.getScore());
@@ -30,18 +32,16 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 				if (rs.next())
 					object.setId(rs.getInt(1));
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 	}
 
-	public void update(Partie object, User user) {
+	public void update(Partie object, User user) throws SQLException {
 		object.setUser(user);
 		update(object);
 	}
 
 	@Override
-	public void update(Partie object) {
+	public void update(Partie object) throws SQLException {
 		if (object.getId() > 0)
 			try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 				 PreparedStatement ps = conn.prepareStatement(UPDATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -49,27 +49,23 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 				ps.setInt(2, object.getId());
 				ps.setInt(3, object.getUser().getId());
 				ps.executeUpdate();
-			} catch (SQLException e) {
-				System.out.println(e.getMessage());
 			}
 	}
 
 	@Override
-	public List<Partie> findAll() {
-		List<Partie> objects = new ArrayList<Partie>();
+	public List<Partie> findAll() throws SQLException {
+		List<Partie> objects = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 Statement s = conn.createStatement();
 			 ResultSet rs = s.executeQuery(FIND_ALL_QUERY)) {
 			while (rs.next())
 				objects.add(new Partie(rs));
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 		return objects;
 	}
 
 	@Override
-	public Partie findById(Integer integer) {
+	public Partie findById(Integer integer) throws SQLException {
 		Partie object = null;
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(FIND_BY_ID_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -78,20 +74,43 @@ public class PartieDAOJDBC extends DAOJDBC<Integer, Partie> {
 				if (rs.next())
 					object = new Partie(rs);
 			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
 		return object;
 	}
 
 	@Override
-	public void deleteById(Integer integer) {
+	public void deleteById(Integer integer) throws SQLException {
 		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
 			 PreparedStatement ps = conn.prepareStatement(DELETE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, integer);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
 		}
+	}
+
+	public List<Partie> getTopParty() throws SQLException {
+		List<Partie> objects = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
+			 Statement s = conn.createStatement();
+			 ResultSet rs = s.executeQuery(TOP_10_PARTIE)) {
+			while (rs.next())
+				objects.add(new Partie( rs ));
+		}
+		return objects;
+	}
+
+	public List<Partie> getTopParty(User user) throws SQLException {
+		List<Partie> objects = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection( dbUrl, dbLogin, dbPwd );
+			 PreparedStatement ps = conn.prepareStatement(TOP_10_PARTIE_ID, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setInt(1, user.getId());
+			try(ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Partie p = new Partie(rs);
+					p.setUser( user );
+					objects.add( p );
+				}
+			}
+		}
+		return objects;
 	}
 }
