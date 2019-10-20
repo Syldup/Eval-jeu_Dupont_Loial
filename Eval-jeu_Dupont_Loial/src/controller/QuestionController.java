@@ -12,9 +12,6 @@ import java.io.IOException;
 @WebServlet( urlPatterns = {"/question"})
 public class QuestionController extends HttpServlet {
 
-	private static final String PAGE_QUEST_JSP = "/WEB-INF/jsp/question.jsp";
-	private static final String PAGE_HOME = "/home";
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse response ) throws ServletException, IOException {
 		QuestionBean model = QuestionBean.getInstence( req );
@@ -23,9 +20,10 @@ public class QuestionController extends HttpServlet {
 
 		if ( model.getCalculCount() < 10 ) {
 			model.initCalcul();
-			req.getRequestDispatcher(PAGE_QUEST_JSP).forward(req, response);
-		} else
-			response.sendRedirect( req.getContextPath() + PAGE_HOME );
+			req.getRequestDispatcher( PageFactory.getQuestJsp() ).forward(req, response);
+		} else {
+			response.sendRedirect( PageFactory.getHomePath(req) );
+		}
 	}
 
 	@Override

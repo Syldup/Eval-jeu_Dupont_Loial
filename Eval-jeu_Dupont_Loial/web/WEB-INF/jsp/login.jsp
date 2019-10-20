@@ -16,10 +16,10 @@
 					<p>${loginBean.authentResult}</p>
 				</div>
 				</c:if>
-				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Connection</label>
-				<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Inscription</label>
-				<div class="login-form">
-					<form class="sign-in-htm" method="POST" action="">
+				<input id="tab-1" type="radio" name="tab" checked><label for="tab-1" class="tab">Connection</label>
+				<input id="tab-2" type="radio" name="tab"><label for="tab-2" class="tab">Inscription</label>
+				<div class="tab-group">
+					<form class="tab-1-htm" method="POST" action="">
 						<div class="group">
 							<label for="user" class="label">Identifient</label>
 							<input id="user" type="text" class="input" name="${loginBean.formFieldLogin}" value="${loginBean.login}"/>
@@ -34,7 +34,7 @@
 						</div>
 						<div class="hr"></div>
 					</form>
-					<form class="sign-up-htm" method="POST" action="">
+					<form class="tab-2-htm" method="POST" action="">
 						<div class="group">
 							<label for="user2" class="label">Identifient</label>
 							<input id="user2" type="text" class="input" name="${loginBean.formFieldLogin}" value="${loginBean.login}"/>

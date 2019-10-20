@@ -11,12 +11,9 @@ import java.io.IOException;
 @WebServlet( urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
 
-	private static final String PAGE_HOME_JSP = "/WEB-INF/jsp/home.jsp";
-	private static final String PAGE_QUEST = "/question";
-
 	@Override
 	protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {
 
-		request.getRequestDispatcher( PAGE_HOME_JSP ).forward( request, response );
+		request.getRequestDispatcher( PageFactory.getHomeJsp() ).forward( request, response );
 	}
 }

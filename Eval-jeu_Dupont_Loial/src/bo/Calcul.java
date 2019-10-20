@@ -16,6 +16,7 @@ public class Calcul implements Serializable {
         this.calcul = calcul;
         this.resultat = resultat;
         this.partie = partie;
+        this.reponce = null;
     }
 
     public Calcul(int id, String calcul, String resultat, String reponce, String date, Partie partie) {

@@ -9,20 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet( urlPatterns = {"/", ""} )
+@WebServlet( urlPatterns = {"/login"} )
 public class LoginController extends HttpServlet {
-	
-	private static final String PAGE_LOGIN_JSP = "/WEB-INF/jsp/login.jsp";
-	private static final String PAGE_HOME = "/home";
 	
 	@Override
 	protected void doGet( HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException {
 		LoginBean model = LoginBean.getInstence( req );
 
 		if ( model.isConnected() )
-			resp.sendRedirect( req.getContextPath() + PAGE_HOME );
+			resp.sendRedirect( PageFactory.getHomePath( req ) );
 		else
-			req.getRequestDispatcher( PAGE_LOGIN_JSP ).forward( req, resp );
+			req.getRequestDispatcher( PageFactory.getLoginJsp() ).forward( req, resp );
 	}
 	
 	@Override

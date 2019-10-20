@@ -1,5 +1,6 @@
 package filter;
 
+import controller.PageFactory;
 import model.LoginBean;
 
 import javax.servlet.*;
@@ -8,17 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/auth/*"})
+@WebFilter(urlPatterns = {"/home", "/question"})
 public class LoginFilter implements Filter {
 	
 	@Override
 	public void doFilter( ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain ) throws IOException, ServletException {
-		HttpSession session = ((HttpServletRequest)servletRequest).getSession(  );
 
-		if ( null == session || null == session.getAttribute( LoginBean.ATT_AUTH_SESSION )) {
-			servletRequest.getRequestDispatcher( "/login" ).forward( servletRequest, servletResponse );
-		} else {
+		LoginBean model = LoginBean.getInstence( (HttpServletRequest) servletRequest );
+
+		if ( model.isConnected() )
 			filterChain.doFilter( servletRequest, servletResponse );
-		}
+		else
+			servletRequest.getRequestDispatcher(PageFactory.getLoginJsp()).forward( servletRequest, servletResponse );
 	}
 }
